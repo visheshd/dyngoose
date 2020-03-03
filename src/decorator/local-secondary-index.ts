@@ -1,15 +1,25 @@
 import { SchemaError } from '../errors'
 import { ITable } from '../table'
 
-export function LocalSecondaryIndex(rangeKeyName: string, options: { name?: string; } = {}) {
+/**
+ * Specify a SecondaryLocalIndex for the table.
+ *
+ * @see {@link https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.CoreComponents.html
+ *    #HowItWorks.CoreComponents.SecondaryIndexes}
+ *
+ * @param {stirng} sortAttributeName The sort key attribute name.
+ * @param {string} [options.name] The name of the index.
+ */
+export function LocalSecondaryIndex(sortAttributeName: string, options: { name?: string; } = {}) {
   return (tableClass: ITable<any>, propertyName: string) => {
-    const range = tableClass.schema.getAttributeByName(rangeKeyName)
+    const indexName = options.name || propertyName
+    const range = tableClass.schema.getAttributeByName(sortAttributeName)
     if (!range) {
-      throw new SchemaError(`Given hashKey ${rangeKeyName} is not declared as attribute`)
+      throw new SchemaError(`Specified sort attribute ${sortAttributeName} for local secondary index ${indexName} is an unknown attribute`)
     }
 
     tableClass.schema.localSecondaryIndexes.push({
-      name: options.name || propertyName,
+      name: indexName,
       propertyName,
       range,
     })

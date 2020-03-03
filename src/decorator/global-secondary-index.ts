@@ -4,8 +4,8 @@ import * as Metadata from '../metadata'
 import { ITable } from '../table'
 
 export interface GlobalSecondaryIndexOptions {
-  hashKey: string
-  rangeKey?: string
+  partitionKey: string
+  sortKey?: string
   name?: string
   projection?: Metadata.Index.GlobalSecondaryIndexProjection
   nonKeyAttributes?: string[]
@@ -17,8 +17,8 @@ export function GlobalSecondaryIndex(options: GlobalSecondaryIndexOptions) {
     const index: Metadata.Index.GlobalSecondaryIndex = {
       propertyName,
       name: options.name || propertyName,
-      hash: table.schema.getAttributeByName(options.hashKey),
-      range: options.rangeKey ? table.schema.getAttributeByName(options.rangeKey) : undefined,
+      hash: table.schema.getAttributeByName(options.partitionKey),
+      range: options.sortKey ? table.schema.getAttributeByName(options.sortKey) : undefined,
       projection: options.projection,
       nonKeyAttributes: options.nonKeyAttributes,
       throughput: options.throughput,

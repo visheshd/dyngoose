@@ -7,7 +7,7 @@ export class TestableTable extends Dyngoose.Table {
   @Dyngoose.$PrimaryKey('id', 'title')
   public static readonly primaryKey: Dyngoose.Query.PrimaryKey<TestableTable, number, string>
 
-  @Dyngoose.$GlobalSecondaryIndex({ hashKey: 'title', projection: 'ALL' })
+  @Dyngoose.$GlobalSecondaryIndex({ partitionKey: 'title', projection: 'ALL' })
   public static readonly titleIndex: Dyngoose.Query.GlobalSecondaryIndex<TestableTable>
 
   @Dyngoose.$DocumentClient()
